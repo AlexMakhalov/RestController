@@ -75,6 +75,7 @@ public class AdminController {
         model.addAttribute("id", id);
         model.addAttribute("user", user);
         model.addAttribute("users", userService.findById(id));
+        model.addAttribute("roles", roleService.findAll());
         return "admins/delete";
     }
 
@@ -83,4 +84,6 @@ public class AdminController {
         userService.deleteById(id);
         return "redirect:/admin";
     }
+
+
 }

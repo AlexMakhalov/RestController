@@ -67,6 +67,17 @@
     </div>
     <br/>
     <br/>
+    <div class="col">
+      <ul>
+        <li th:each="role : ${roles}">
+          <label>
+            <input type="checkbox" name="roles" th:field="*{roles}" th:value="${role.id}"/>
+            <span th:text="${role.name}"></span>
+          </label>
+        </li>
+      </ul>
+      <div style="color: red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">City Error</div>
+    </div>
     <button class="btn btn-outline-danger" type="submit">Удалить пользователя</button>
     <br/><br/>
   </div>

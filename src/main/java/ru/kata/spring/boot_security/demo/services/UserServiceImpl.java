@@ -1,11 +1,9 @@
 package ru.kata.spring.boot_security.demo.services;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
@@ -16,11 +14,12 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository) {
+    private final BCryptPasswordEncoder encoder;
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder encoder) {
         this.userRepository = userRepository;
+        this.encoder = encoder;
     }
 
-    @Query("Select u from User u left join fetch u.roles where u.username=:username")
     public User findByUsername(String username) {
        return userRepository.findByUsername(username);
     }
@@ -43,7 +42,6 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
         if (user == null) {
@@ -57,8 +55,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Override
     public void save(User user) {

@@ -13,6 +13,7 @@ public interface UserService extends UserDetailsService {
     void save(User user);
     User findById(Long id);
     void deleteById (Long id);
+    void update(User user);
 
 
 }

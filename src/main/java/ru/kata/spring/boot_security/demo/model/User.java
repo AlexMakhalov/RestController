@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.model;
 
 
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -56,18 +58,19 @@ public class User implements UserDetails {
     @Size(min = 2,max = 40,message = "Название города должно быть от 2 до 40 символов!")
     private String city;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Collection<Role> roles;
+    @Cascade({org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.REFRESH})
+    private List<Role> roles;
 
     public User() {
     }
 
-    public User(String username, String lastName, String password, int age, String email, String city, Collection<Role> roles) {
+    public User(String username, String lastName, String password, int age, String email, String city, List<Role> roles) {
         this.username = username;
         this.lastName = lastName;
         this.password = password;
@@ -109,11 +112,11 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public Collection<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 

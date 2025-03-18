@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
@@ -17,9 +18,11 @@ import javax.validation.Valid;
 public class AdminController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
-    public AdminController(final UserService userService) {
+    public AdminController(final UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping()
@@ -32,6 +35,7 @@ public class AdminController {
     @GetMapping("/new")
     public String newUser(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("roles", roleService.findAll());
         return "admins/new";
     }
 
@@ -50,6 +54,7 @@ public class AdminController {
     public String edit(@ModelAttribute("id") Long id, Model model) {
         model.addAttribute("id", id);
         model.addAttribute("user", userService.findById(id));
+        model.addAttribute("roles", roleService.findAll());
         return "admins/edit";
     }
 
@@ -59,7 +64,7 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "admins/edit";
         }
-        userService.save(user);
+        userService.update(user);
         return "redirect:/admin";
     }
 

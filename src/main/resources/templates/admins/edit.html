@@ -64,10 +64,14 @@
     <br/>
     <br/>
     <div class="col">
-      <select type="text" th:field="*{roles}" id="roles" class="form-control border border-danger"/>
-      <option value="ROLE_USER">ROLE_USER</option>
-      <option value="ROLE_ADMIN">ROLE_ADMIN</option>
-      </select>
+      <ul>
+        <li th:each="role : ${roles}">
+          <label>
+            <input type="checkbox" name="roles" th:field="*{roles}" th:value="${role.id}"/>
+            <span th:text="${role.name}"></span>
+          </label>
+        </li>
+      </ul>
       <div style="color: red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">City Error</div>
     </div>
     <br/>

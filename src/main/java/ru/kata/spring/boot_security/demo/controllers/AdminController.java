@@ -3,10 +3,7 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
@@ -49,18 +46,16 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-
-    @GetMapping("/edit")
-    public String edit(@ModelAttribute("id") Long id, Model model) {
-        model.addAttribute("id", id);
+    @GetMapping("/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
         model.addAttribute("user", userService.findById(id));
         model.addAttribute("roles", roleService.findAll());
         return "admins/edit";
     }
 
-    @PostMapping("/edit")
-    public String update(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult) {
+
+    @PatchMapping("/{id}")
+    public String update(@ModelAttribute("user") @Valid User user,BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "admins/edit";
         }
@@ -69,21 +64,26 @@ public class AdminController {
     }
 
 
-
-    @GetMapping("/delete")
-    public String drop(@ModelAttribute("id") Long id, Model model, User user) {
-        model.addAttribute("id", id);
-        model.addAttribute("user", user);
-        model.addAttribute("users", userService.findById(id));
+    @GetMapping("/{id}/delete")
+    public String drop(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.findById(id));
         model.addAttribute("roles", roleService.findAll());
         return "admins/delete";
     }
 
-    @PostMapping("/delete")
-    public String delete(@ModelAttribute("id") Long id) {
-        userService.deleteById(id);
+
+    @DeleteMapping("/{id}")
+    public String delete(@ModelAttribute("user") @Valid User user,BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "admins/delete";
+        }
+        userService.deleteById(user.getId());
         return "redirect:/admin";
     }
+
+
+
+
 
 
 }

@@ -12,8 +12,7 @@
   <strong>Вы точно хотите удалить этого пользователя?</strong>
 </div>
 <br/>
-<form th:method="Post" th:action="@{/admin/delete}" th:object="${users}">
-  <input type="hidden" name="id" th:value="${users.id}"/>
+<form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
   <div class="row g-6">
     <div class="col">
       <input type="text" th:field="*{username}" id="username" class="form-control border border-danger"

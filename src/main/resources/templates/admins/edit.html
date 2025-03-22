@@ -7,8 +7,7 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body style="background-color: antiquewhite">
-<form th:method="Post" th:action="@{/admin/edit}" th:object="${user}">
-  <input type="hidden" name="id" th:value="${user.id}"/>
+<form th:method="PATCH" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
   <br/>
   <div class="row g-6">
     <div class="col">

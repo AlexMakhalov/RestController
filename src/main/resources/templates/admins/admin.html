@@ -32,8 +32,8 @@
     <td th:text="${user.getEmail()}"/>
     <td th:text="${user.getCity()}"/>
     <td th:text="${user.getRoles()}"/>
-    <td><a class="btn btn-outline-warning" th:href="@{/admin/edit(id=${user.id})}" >Изменить пользователя</a></td>
-    <td><a class="btn btn-outline-danger" th:href="@{/admin/delete(id=${user.id})}" >Удалить пользователя</a></td>
+    <td><a class="btn btn-outline-warning" th:href="@{/admin/{id}/edit(id=${user.getId()})}" >Изменить пользователя</a></td>
+    <td><a class="btn btn-outline-danger" th:href="@{/admin/{id}/delete(id=${user.getId()})}" >Удалить пользователя</a></td>
     <th></th>
     <th></th>
 

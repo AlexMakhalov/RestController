@@ -259,7 +259,8 @@
     <!-- Боковая панель -->
     <aside>
         <div class="d-flex flex-column gap-2">
-            <a href="/user" class="btn btn-primary">Пользователь</a>
+            <a href="/admin" class="btn btn-primary">Админ</a>
+            <a href="/admin/info" class="btn btn-primary">Пользователь</a>
         </div>
     </aside>
 
@@ -267,31 +268,32 @@
     <main>
         <h2 class="mb-4">Информация о пользователе</h2>
 
-        <div class="user-info-header">
-            <h3 class="user-info-title">About user</h3>
-        </div>
-        <table class="table table-hover align-middle">
-            <thead class="table-light">
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Имя</th>
-                <th scope="col">Фамилия</th>
-                <th scope="col">Возраст</th>
-                <th scope="col">Почта</th>
-                <th scope="col">Город</th>
-                <th scope="col">Роль</th>
-            </tr>
-            </thead>
-            <td th:text="${user.getId()}" />
-            <td th:text="${user.getMyUsername()}" />
-            <td th:text="${user.getLastName()}" />
-            <td th:text="${user.getAge()}" />
-            <td th:text="${user.getEmail()}" />
-            <td th:text="${user.getCity()}" />
-            <td th:text="${user.getRoles()}" />
-            </tr>
-            </tbody>
-        </table>
+                <div class="user-info-header">
+                    <h3 class="user-info-title">About user</h3>
+                </div>
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Фамилия</th>
+                        <th scope="col">Возраст</th>
+                        <th scope="col">Почта</th>
+                        <th scope="col">Город</th>
+                        <th scope="col">Роль</th>
+                    </tr>
+                    </thead>
+                        <td th:text="${user.getId()}" />
+                        <td th:text="${user.getMyUsername()}" />
+                        <td th:text="${user.getLastName()}" />
+                        <td th:text="${user.getAge()}" />
+                        <td th:text="${user.getEmail()}" />
+                        <td th:text="${user.getCity()}" />
+                        <td th:text="${user.getRoles()}" />
+
+                    </tr>
+                    </tbody>
+                </table>
     </main>
 </div>
 

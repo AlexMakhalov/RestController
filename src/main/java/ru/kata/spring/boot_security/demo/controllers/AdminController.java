@@ -9,6 +9,7 @@ import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,10 +24,12 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String admin(Model model) {
+    public String admin(Model model, Principal principal) {
         model.addAttribute("users", userService.findAll());
         model.addAttribute("roles", roleService.findAll());
         model.addAttribute("user", new User());
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("people", user);
         return "admins/admin";
     }
 
@@ -59,5 +62,11 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+    @GetMapping("/info")
+    public String info(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "admins/info";
+    }
 
 }

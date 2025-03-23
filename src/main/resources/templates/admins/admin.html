@@ -376,7 +376,7 @@
               </button>
 
               <!-- Модальное окно для удаления пользователя -->
-              <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+              <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -384,10 +384,35 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      <p>Вы уверены, что хотите удалить этого пользователя?</p>
                       <form id="deleteUserForm" th:action="@{/admin/{id}/delete(id=${user.id})}" th:method="DELETE">
                         <input type="hidden" id="deleteUserId" name="id">
-                        <button type="submit" class="btn btn-danger">Удалить</button>
+                        <div class="mb-3">
+                          <label for="deleteUsername" class="form-label">Имя пользователя:</label>
+                          <input type="text" class="form-control" id="deleteUsername" name="username" readonly>
+                        </div>
+                        <div class="mb-3">
+                          <label for="deleteLastName" class="form-label">Фамилия:</label>
+                          <input type="text" class="form-control" id="deleteLastName" name="lastName" readonly>
+                        </div>
+                        <div class="mb-3">
+                          <label for="deleteAge" class="form-label">Возраст:</label>
+                          <input type="number" class="form-control" id="deleteAge" name="age" readonly>
+                        </div>
+                        <div class="mb-3">
+                          <label for="deleteEmail" class="form-label">E-mail:</label>
+                          <input type="email" class="form-control" id="deleteEmail" name="email" readonly>
+                        </div>
+                        <div class="mb-3">
+                          <label for="deleteCity" class="form-label">Город:</label>
+                          <input type="text" class="form-control" id="deleteCity" name="city" readonly>
+                        </div>
+                        <div class="mb-3">
+                          <label for="deleteRoles" class="form-label">Роли:</label>
+                          <select class="form-select" id="deleteRoles" name="roles" multiple disabled>
+                            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+                          </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Удалить</button>
                       </form>
                     </div>
                   </div>
@@ -496,8 +521,20 @@
   document.getElementById('deleteUserModal').addEventListener('show.bs.modal', function (event) {
     const button = event.relatedTarget;
     const userId = button.getAttribute('data-user-id');
+    const username = button.getAttribute('data-user-username');
+    const lastName = button.getAttribute('data-user-lastname');
+    const age = button.getAttribute('data-user-age');
+    const email = button.getAttribute('data-user-email');
+    const city = button.getAttribute('data-user-city');
 
     document.getElementById('deleteUserId').value = userId;
+    document.getElementById('deleteUsername').value = username;
+    document.getElementById('deleteLastName').value = lastName;
+    document.getElementById('deleteAge').value = age;
+    document.getElementById('deleteEmail').value = email;
+    document.getElementById('deleteCity').value = city;
+
+
     document.getElementById('deleteUserForm').action = `/admin/${userId}/delete`;
   });
 

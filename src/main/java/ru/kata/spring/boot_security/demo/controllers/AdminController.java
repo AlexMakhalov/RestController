@@ -48,7 +48,7 @@ public class AdminController {
             return "admins/admin";
         }
         user.setId(id);
-        userService.save(user);
+        userService.update(user);
         return "redirect:/admin";
     }
 

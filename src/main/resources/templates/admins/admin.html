@@ -313,6 +313,7 @@
                       "data-user-id=${user.id},
                        data-user-username=${user.username},
                        data-user-lastname=${user.lastName},
+                       data-user-password=${user.password},
                        data-user-age=${user.age},
                        data-user-email=${user.email},
                        data-user-city=${user.city}">
@@ -338,17 +339,25 @@
                           <input type="text" class="form-control" id="editLastName" name="lastName" required>
                         </div>
                         <div class="mb-3">
+                          <label for="editPassword" class="form-label">Пароль:</label>
+                          <input type="password" class="form-control" id="editPassword" name="password" required>
+                        </div>
+                        <div class="mb-3">
                           <label for="editAge" class="form-label">Возраст:</label>
                           <input type="number" class="form-control" id="editAge" name="age" required>
                         </div>
                         <div class="mb-3">
                           <label for="editEmail" class="form-label">E-mail:</label>
-                          <input type="email" class="form-control" id="editEmail" name="mail" required>
+                          <input type="email" class="form-control" id="editEmail" name="email" required>
                         </div>
                         <div class="mb-3">
                           <label for="editCity" class="form-label">Город:</label>
                           <input type="text" class="form-control" id="editCity" name="city" required>
                         </div>
+<!--                        <div class="mb-3">-->
+<!--                          <label for="editRole" class="form-label">Роль:</label>-->
+<!--                          <input type="text" class="form-control" id="editRole" name="role" required>-->
+<!--                        </div>-->
                         <div class="mb-3">
                           <label for="editRoles" class="form-label">Роли:</label>
                           <select class="form-select" id="editRoles" name="roles" multiple>
@@ -503,16 +512,20 @@
     const userId = button.getAttribute('data-user-id');
     const username = button.getAttribute('data-user-username');
     const lastName = button.getAttribute('data-user-lastname');
+    const password = button.getAttribute('data-user-password');
     const age = button.getAttribute('data-user-age');
     const email = button.getAttribute('data-user-email');
     const city = button.getAttribute('data-user-city');
+    const roles = button.getAttribute('data-user-roles');
 
     document.getElementById('editUserId').value = userId;
     document.getElementById('editUsername').value = username;
     document.getElementById('editLastName').value = lastName;
+    document.getElementById('editPassword').value = password;
     document.getElementById('editAge').value = age;
     document.getElementById('editEmail').value = email;
     document.getElementById('editCity').value = city;
+    document.getElementById('editRoles').value = roles;
 
     document.getElementById('editUserForm').action = `/admin/${userId}/edit`;
   });

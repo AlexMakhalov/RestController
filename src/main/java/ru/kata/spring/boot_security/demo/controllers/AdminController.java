@@ -44,7 +44,6 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-
     @PatchMapping("/{id}/edit")
     public String update(@ModelAttribute("user") @Valid User user, @PathVariable("id") Long id,BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -55,18 +54,11 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") Long id) {
         userService.deleteById(id);
         return "redirect:/admin";
     }
 
-    @GetMapping("/info")
-    public String info(Model model, Principal principal) {
-        User user = userService.findByUsername(principal.getName());
-        model.addAttribute("user", user);
-        return "admins/info";
-    }
 
 }

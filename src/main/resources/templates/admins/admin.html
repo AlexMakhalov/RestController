@@ -314,7 +314,7 @@
 
         <!-- Переключатели табов -->
         <div id="admin-content" class="mode-content">
-            <h2 class="mb-4">Admin pane</h2>
+            <h2 class="mb-4">Admin panel</h2>
             <input class="tabs-input" type="radio" name="tabs" id="tab1" checked>
             <input class="tabs-input" type="radio" name="tabs" id="tab2">
 
@@ -363,7 +363,7 @@
                        data-user-age=${user.age},
                        data-user-email=${user.email},
                        data-user-city=${user.city}">
-                                    Редактировать
+                                    Edit
                                 </button>
                                 <!-- Модальное окно для редактирования пользователя -->
                                 <div class="modal fade" id="editUserModal" tabindex="-1"
@@ -381,45 +381,41 @@
                                                       th:method="PATCH">
                                                     <input type="hidden" id="editUserId" name="id">
                                                     <div class="mb-3">
-                                                        <label for="editUsername" class="form-label">Имя
-                                                            пользователя:</label>
+                                                        <label for="editUsername" class="form-label">First name:</label>
                                                         <input type="text" class="form-control"
                                                                id="editUsername" name="username" required>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="editLastName"
-                                                               class="form-label">Фамилия:</label>
+                                                               class="form-label">Last name:</label>
                                                         <input type="text" class="form-control"
                                                                id="editLastName" name="lastName" required>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="editPassword"
-                                                               class="form-label">Пароль:</label>
+                                                               class="form-label">Password:</label>
                                                         <input type="password" class="form-control"
                                                                id="editPassword" name="password" required>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="editAge" class="form-label">Возраст:</label>
+                                                        <label for="editAge" class="form-label">Age:</label>
                                                         <input type="number" class="form-control" id="editAge"
                                                                name="age" required>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="editEmail"
-                                                               class="form-label">E-mail:</label>
+                                                               class="form-label">Email:</label>
                                                         <input type="email" class="form-control" id="editEmail"
                                                                name="email" required>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="editCity" class="form-label">Город:</label>
+                                                        <label for="editCity" class="form-label">City:</label>
                                                         <input type="text" class="form-control" id="editCity"
                                                                name="city" required>
                                                     </div>
-                                                    <!--                        <div class="mb-3">-->
-                                                    <!--                          <label for="editRole" class="form-label">Роль:</label>-->
-                                                    <!--                          <input type="text" class="form-control" id="editRole" name="role" required>-->
-                                                    <!--                        </div>-->
+
                                                     <div class="mb-3">
-                                                        <label for="editRoles" class="form-label">Роли:</label>
+                                                        <label for="editRoles" class="form-label">Role:</label>
                                                         <select class="form-select" id="editRoles" name="roles"
                                                                 multiple>
                                                             <option th:each="role : ${roles}"
@@ -446,7 +442,7 @@
                       data-user-age=${user.age},
                       data-user-email=${user.email},
                       data-user-city=${user.city}">
-                                    Удалить
+                                    Delete
                                 </button>
 
                                 <!-- Модальное окно для удаления пользователя -->
@@ -465,38 +461,37 @@
                                                       th:method="DELETE">
                                                     <input type="hidden" id="deleteUserId" name="id">
                                                     <div class="mb-3">
-                                                        <label for="deleteUsername" class="form-label">Имя
-                                                            пользователя:</label>
+                                                        <label for="deleteUsername" class="form-label">First name:</label>
                                                         <input type="text" class="form-control"
                                                                id="deleteUsername" name="username" readonly>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="deleteLastName"
-                                                               class="form-label">Фамилия:</label>
+                                                               class="form-label">Last name:</label>
                                                         <input type="text" class="form-control"
                                                                id="deleteLastName" name="lastName" readonly>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="deleteAge"
-                                                               class="form-label">Возраст:</label>
+                                                               class="form-label">Age:</label>
                                                         <input type="number" class="form-control" id="deleteAge"
                                                                name="age" readonly>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="deleteEmail"
-                                                               class="form-label">E-mail:</label>
+                                                               class="form-label">Email:</label>
                                                         <input type="email" class="form-control"
                                                                id="deleteEmail" name="email" readonly>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="deleteCity"
-                                                               class="form-label">Город:</label>
+                                                               class="form-label">City:</label>
                                                         <input type="text" class="form-control" id="deleteCity"
                                                                name="city" readonly>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="deleteRoles"
-                                                               class="form-label">Роли:</label>
+                                                               class="form-label">Role:</label>
                                                         <select class="form-select" id="deleteRoles"
                                                                 name="roles" multiple disabled>
                                                             <option th:each="role : ${roles}"
@@ -505,7 +500,7 @@
                                                         </select>
                                                     </div>
                                                     <button type="submit"
-                                                            class="btn btn-primary">Удалить</button>
+                                                            class="btn btn-primary">Delete</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -529,23 +524,23 @@
                             <div class="row g-3">
                                 <!-- Первая строка -->
                                 <div class="col-md-12">
-                                    <label class="form-label">Имя</label>
+                                    <label class="form-label">First name</label>
                                     <input th:field="*{username}" type="text" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <label class="form-label">Фамилия</label>
+                                    <label class="form-label">Last name</label>
                                     <input th:field="*{lastName}" type="text" class="form-control" required>
                                 </div>
 
                                 <!-- Вторая строка -->
                                 <div class="col-md-12">
-                                    <label class="form-label">Пароль</label>
+                                    <label class="form-label">Password</label>
                                     <input th:field="*{password}" type="password" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <label class="form-label">Возраст</label>
+                                    <label class="form-label">Age</label>
                                     <input th:field="*{age}" type="number" class="form-control" min="1" max="120"
                                            step="1" placeholder="Введите возраст" required>
                                 </div>
@@ -558,13 +553,13 @@
 
                                 <!-- Город -->
                                 <div class="col-12">
-                                    <label class="form-label">Город</label>
+                                    <label class="form-label">City</label>
                                     <input th:field="*{city}" type="text" class="form-control" required>
                                 </div>
 
                                 <!-- Роли -->
                                 <div class="col-12">
-                                    <label class="form-label">Роли</label>
+                                    <label class="form-label">Role</label>
                                     <select class="form-select" th:field="*{roles}" multiple size="3"
                                             style="height: auto;">
                                         <option th:each="role : ${roles}" th:value="${role.id}"
@@ -587,21 +582,21 @@
         </div>
 
         <div id="user-content" class="mode-content">
-            <h2 class="mb-4">Данные пользователя</h2>
+            <h2 class="mb-4">User information-page</h2>
             <div class="table-responsive admin-table mt-3">
                 <div class="user-info-header">
-                    <h3 class="user-info-title">Пользователь</h3>
+                    <h3 class="user-info-title">About user</h3>
                 </div>
                 <table class="table table-hover align-middle">
                     <thead class="table-light">
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Имя</th>
-                        <th scope="col">Фамилия</th>
-                        <th scope="col">Возраст</th>
-                        <th scope="col">Почта</th>
-                        <th scope="col">Город</th>
-                        <th scope="col">Роль</th>
+                        <th scope="col">First name</th>
+                        <th scope="col">Last name</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Role</th>
                     </tr>
                     </thead>
                     <tbody>

@@ -1,8 +1,9 @@
 // table_new_modal_admin.js
 document.addEventListener('DOMContentLoaded', function () {
-    const API_BASE_URL = 'http://localhost:8080/api';
+    const API_BASE_URL = 'http://localhost:8080/api/admin';
     const USERS_ENDPOINT = `${API_BASE_URL}/users`;
     const ROLES_ENDPOINT = `${API_BASE_URL}/roles`;
+    const CURRENT_USER_ENDPOINT = `${API_BASE_URL}/users/current`;
 
     // Элементы интерфейса
     const userForm = document.getElementById('user-form');
@@ -10,12 +11,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const usersTableBody = document.querySelector('#users-table tbody');
     const adminTableBody = document.querySelector('#admin-table tbody');
     const formMessage = document.getElementById('form-message');
+    const currentUserInfo = document.getElementById('current-user-info');
 
     let currentUser = null;
     let deleteUserId = null;
 
     // Инициализация приложения
     async function initApp() {
+        await getCurrentUser();
         await loadRoles();
         await loadAllUsers();
         await displayCurrentUser();
@@ -37,6 +40,45 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // Получение текущего пользователя
+    async function getCurrentUser() {
+        try {
+            const response = await fetch(CURRENT_USER_ENDPOINT);
+            if (!response.ok) throw new Error('Failed to fetch current user');
+            currentUser = await response.json();
+            return currentUser;
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+            currentUserInfo.textContent = 'Error loading user data';
+            return null;
+        }
+    }
+
+    // Отображение информации о текущем пользователе
+    function displayCurrentUser() {
+        if (!currentUser) return;
+
+        const roles = currentUser.roles
+            ? currentUser.roles.map(role => role.name.replace('ROLE_', '')).join(', ')
+            : 'No roles';
+
+        currentUserInfo.textContent = `${currentUser.username} with role: ${roles}`;
+
+        // Заполнение таблицы информации о текущем пользователе
+        adminTableBody.innerHTML = `
+            <tr>
+                <td>${currentUser.id || '-'}</td>
+                <td>${currentUser.username || '-'}</td>
+                <td>${currentUser.lastName || '-'}</td>
+                <td>${currentUser.age || '-'}</td>
+                <td>${currentUser.email || '-'}</td>
+                <td>${currentUser.city || '-'}</td>
+                <td>${roles}</td>
+            </tr>
+        `;
+    }
+
 
     // Загрузка ролей
     async function loadRoles() {

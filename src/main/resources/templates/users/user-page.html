@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+<header class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+            <span class="navbar-brand" id="current-user-info">
+                <!-- Текст будет заполнен через JavaScript -->
+                Loading user data...
+            </span>
+        <a href="/logout" class="btn btn-outline-light">Logout</a>
+    </div>
+</header>
+
+<div class="wrapper">
+    <!-- Боковая панель -->
+    <aside>
+        <div class="d-flex flex-column gap-2">
+            <!-- Неактивная кнопка User -->
+            <button class="btn btn-primary disabled">User</button>
+        </div>
+    </aside>
+
+    <!-- Основной контент -->
+    <main>
+        <input type="radio" name="mode" id="mode-admin" class="mode-input" checked>
+        <input type="radio" name="mode" id="mode-user" class="mode-input">
+
+        <!-- Переключатели табов -->
+        <div id="admin-content" class="mode-content">
+            <h2 class="mb-4">User Info</h2>
+            <input class="tabs-input" type="radio" name="tabs" id="tab1" checked>
+            <input class="tabs-input" type="radio" name="tabs" id="tab2">
+
+
+            <!-- Контент табов -->
+            <div class="tab-content" id="content1">
+                <div class="table-responsive admin-table mt-3">
+                    <div class="user-info-header">
+                        <h3 class="user-info-title">About user</h3>
+                    </div>
+                    <table class="table table-hover align-middle" id="users-table">
+                        <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">First name</th>
+                            <th scope="col">Last name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">City</th>
+                            <th scope="col">Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+    </main>
+</div>
+</main>
+</div>
+<script src="/user.js"></script>
+</body>
+
+</html>

@@ -64,7 +64,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    @Cascade({org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.REFRESH})
+    @Cascade({org.hibernate.annotations.CascadeType.REFRESH})
     private List<Role> roles;
 
     public User() {

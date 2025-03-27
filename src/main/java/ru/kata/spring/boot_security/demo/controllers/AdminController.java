@@ -1,18 +1,24 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.handler.NotFoundUserException;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
-@Controller
-@RequestMapping("/admin")
+@RestController
+@RequestMapping("/api")
+@CrossOrigin
 public class AdminController {
 
     private final UserService userService;
@@ -23,41 +29,66 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping()
-    public String admin(Model model, Principal principal) {
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("user", new User());
-        User user = userService.findByUsername(principal.getName());
-        model.addAttribute("people", user);
-        return "admins/admin";
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers(@AuthenticationPrincipal final Principal principal) {
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
 
-    @PostMapping("/new")
-    public String create(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult) {
+    @GetMapping("/users/current")
+    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal final Principal principal) {
+        return new ResponseEntity<>(userService.findByUsername(principal.getName()), HttpStatus.OK);
+    }
+
+
+
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            throw new NotFoundUserException("Not found user with id " + id);
+        }
+        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/roles")
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return new ResponseEntity<>(roleService.findAll(), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/users")
+    public ResponseEntity<Void> create(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "admins/new";
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         userService.save(user);
-        return "redirect:/admin";
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}/edit")
-    public String update(@ModelAttribute("user") @Valid User user, @PathVariable("id") Long id,BindingResult bindingResult) {
+    @PutMapping("/users/{id}")
+    public ResponseEntity<User> update(@RequestBody @Valid User user, @PathVariable Long id, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "admins/admin";
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (userService.findById(id) == null) {
+            throw new NotFoundUserException("Not found user with id " + id);
         }
         user.setId(id);
         userService.update(user);
-        return "redirect:/admin";
+        return new ResponseEntity<>(user, HttpStatus.OK);
+
     }
 
-    @DeleteMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long id) {
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<User> delete(@PathVariable Long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            throw new NotFoundUserException("Not found user with id " + id);
+        }
         userService.deleteById(id);
-        return "redirect:/admin";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

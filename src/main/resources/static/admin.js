@@ -208,18 +208,76 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+    // Активируем все элементы формы
+    const form = document.getElementById('editForm');
+    const inputs = form.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        input.readOnly = false;
+        input.disabled = false;
+    });
 
+    // Для чекбоксов
+    const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.disabled = false;
+    });
+
+    // Обработчики для кнопок удаления
     // Обработчики для кнопок удаления
     function addDeleteListeners() {
         document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', async () => {
                 deleteUserId = btn.dataset.userId;
-                const username = btn.closest('tr').querySelector('td:nth-child(2)').textContent;
-                document.getElementById('deleteUserName').textContent = username;
+                try {
+                    const response = await fetch(`${USERS_ENDPOINT}/${deleteUserId}`);
+                    if (!response.ok) throw new Error('Failed to load user');
 
-                const deleteModal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
-                deleteModal.show();
+                    const user = await response.json();
+                    fillDeleteForm(user);
+
+                    const deleteModal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+                    deleteModal.show();
+                } catch (error) {
+                    console.error('Error loading user:', error);
+                    showMessage('Error loading user data', 'danger');
+                }
             });
+        });
+    }
+
+// Заполнение формы удаления (read-only)
+    function fillDeleteForm(user) {
+        document.getElementById('deleteUserId').value = user.id;
+        document.getElementById('deleteUsername').value = user.username || '';
+        document.getElementById('deleteLastName').value = user.lastName || '';
+        document.getElementById('deleteAge').value = user.age || '';
+        document.getElementById('deleteEmail').value = user.email || '';
+        document.getElementById('deleteCity').value = user.city || '';
+
+        // Установка ролей (read-only)
+        document.getElementById('deleteRoleAdmin').checked = false;
+        document.getElementById('deleteRoleUser').checked = false;
+
+        user.roles?.forEach(role => {
+            if (role.name === 'ROLE_ADMIN') {
+                document.getElementById('deleteRoleAdmin').checked = true;
+            } else if (role.name === 'ROLE_USER') {
+                document.getElementById('deleteRoleUser').checked = true;
+            }
+        });
+
+        // Делаем все элементы формы read-only
+        const form = document.getElementById('deleteForm');
+        const inputs = form.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.readOnly = true;
+            input.disabled = true;
+        });
+
+        // Для чекбоксов используем другой подход
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.disabled = true;
         });
     }
 

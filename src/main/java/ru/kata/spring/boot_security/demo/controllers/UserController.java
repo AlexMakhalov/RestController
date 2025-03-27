@@ -20,7 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("users")
+    @GetMapping("/users")
     public ResponseEntity<User> user(Principal principal) {
         User user = userService.findByUsername(principal.getName());
         return ResponseEntity.ok(user);

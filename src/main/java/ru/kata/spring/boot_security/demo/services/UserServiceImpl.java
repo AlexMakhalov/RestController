@@ -49,9 +49,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void update(User user) {
-        if (user.getMyPassword() != null) {
+        User userDemo = userRepository.findById(user.getId()).orElseThrow(null);
+        if (!userDemo.getMyPassword().equals(user.getMyPassword())) {
             user.setPassword(encoder.encode(user.getMyPassword()));
         }
+
         userRepository.save(user);
     }
 

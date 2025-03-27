@@ -1,53 +1,45 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="/style.css" rel="stylesheet">
-
 </head>
-
 <body>
 <header class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
-            <span class="navbar-brand">
-                <span id="current-user-info">Loading user data...</span>
+            <span class="navbar-brand" id="current-user-info">
+                Loading user data...
             </span>
         <a href="/logout" class="btn btn-outline-light">Logout</a>
     </div>
 </header>
 
 <div class="wrapper">
-    <!-- Боковая панель -->
     <aside>
         <div class="d-flex flex-column gap-2">
-            <!-- Кнопки для переключения режимов -->
             <label for="mode-admin" class="btn btn-primary">Admin</label>
             <label for="mode-user" class="btn btn-primary">User</label>
         </div>
     </aside>
 
-    <!-- Основной контент -->
     <main>
         <input type="radio" name="mode" id="mode-admin" class="mode-input" checked>
         <input type="radio" name="mode" id="mode-user" class="mode-input">
 
-        <!-- Переключатели табов -->
         <div id="admin-content" class="mode-content">
             <h2 class="mb-4">Admin panel</h2>
             <input class="tabs-input" type="radio" name="tabs" id="tab1" checked>
             <input class="tabs-input" type="radio" name="tabs" id="tab2">
 
-            <!-- Навигация -->
             <nav class="nav nav-tabs">
                 <label for="tab1" class="nav-link">User table</label>
                 <label for="tab2" class="nav-link">New user</label>
             </nav>
 
-            <!-- Контент табов -->
             <div class="tab-content" id="content1">
                 <div class="table-responsive admin-table mt-3">
                     <div class="user-info-header">
@@ -67,16 +59,11 @@
                             <th scope="col">Delete</th>
                         </tr>
                         </thead>
-                        <tbody>
-
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
 
-
-
-            <!-- Форма добавления пользователя -->
             <div class="tab-content" id="content2">
                 <div class="card border-0 shadow">
                     <div class="card-header bg-white">
@@ -85,18 +72,15 @@
                     <div class="card-body d-flex justify-content-center">
                         <form class="col-12 col-md-8 col-lg-6" id="user-form">
                             <div id="form-message" class="alert d-none"></div>
-
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label">First name</label>
                                     <input name="username" type="text" class="form-control" required>
                                 </div>
-
                                 <div class="col-md-6">
                                     <label class="form-label">Last name</label>
                                     <input name="lastName" type="text" class="form-control" required>
                                 </div>
-
                                 <div class="col-md-6">
                                     <label class="form-label">Password</label>
                                     <div class="input-group">
@@ -106,31 +90,25 @@
                                         </button>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6">
                                     <label class="form-label">Age</label>
                                     <input name="age" type="number" class="form-control" min="1" max="120" required>
                                 </div>
-
                                 <div class="col-12">
                                     <label class="form-label">Email</label>
                                     <input name="email" type="email" class="form-control" required>
                                 </div>
-
                                 <div class="col-12">
                                     <label class="form-label">City</label>
                                     <input name="city" type="text" class="form-control" required>
                                 </div>
-
                                 <div class="col-12">
                                     <label class="form-label">Roles</label>
                                     <select class="form-select" id="roles-select" multiple size="3" required>
-                                        <!-- Роли будут загружены через JS -->
                                         <option disabled>Loading roles...</option>
                                     </select>
                                     <div class="form-text">Hold Ctrl to select multiple roles</div>
                                 </div>
-
                                 <div class="col-12 mt-4">
                                     <button type="submit" class="btn btn-success w-100">
                                         <i class="bi bi-person-plus me-2"></i>Add new user
@@ -141,11 +119,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div id="user-content" class="mode-content">
-            <h2 class="mb-4">User information-page</h2>
+            <h2 class="mb-4">User information</h2>
             <div class="table-responsive admin-table mt-3">
                 <div class="user-info-header">
                     <h3 class="user-info-title">About user</h3>
@@ -162,18 +139,14 @@
                         <th scope="col">Role</th>
                     </tr>
                     </thead>
-                    <tbody>
-
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
     </main>
 </div>
-</main>
-</div>
-<!-- Добавить перед закрывающим </body> -->
-<!-- Модальное окно редактирования -->
+
+<!-- Модальные окна -->
 <div class="modal fade" id="editUserModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -212,8 +185,7 @@
                         <label class="form-label">Roles</label>
                         <div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="ROLE_ADMIN"
-                                       id="editRoleAdmin">
+                                <input class="form-check-input" type="checkbox" value="ROLE_ADMIN" id="editRoleAdmin">
                                 <label class="form-check-label" for="editRoleAdmin">ADMIN</label>
                             </div>
                             <div class="form-check">
@@ -232,7 +204,6 @@
     </div>
 </div>
 
-<!-- Модальное окно удаления -->
 <div class="modal fade" id="deleteUserModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -251,9 +222,7 @@
     </div>
 </div>
 
-<!-- Добавить после подключения Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/admin.js"></script>
 </body>
-
 </html>

@@ -1,4 +1,3 @@
-// table_new_modal_admin.js
 document.addEventListener('DOMContentLoaded', function () {
     const API_BASE_URL = 'http://localhost:8080/api/admin';
     const USERS_ENDPOINT = `${API_BASE_URL}/users`;
@@ -21,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
         await getCurrentUser();
         await loadRoles();
         await loadAllUsers();
-        await displayCurrentUser();
 
         // Обработчик переключения видимости пароля
         document.addEventListener('click', function (e) {
@@ -46,49 +44,56 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const response = await fetch(CURRENT_USER_ENDPOINT);
             if (!response.ok) throw new Error('Failed to fetch current user');
+
             currentUser = await response.json();
+            displayCurrentUserInfo(currentUser);
+            renderCurrentUserTable(currentUser);
+
             return currentUser;
         } catch (error) {
             console.error('Error fetching current user:', error);
             currentUserInfo.textContent = 'Error loading user data';
+            adminTableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-danger">Error loading user data</td>
+                </tr>
+            `;
             return null;
         }
     }
 
-    // Отображение информации о текущем пользователе
-    function displayCurrentUser() {
-        if (!currentUser) return;
-
-        const roles = currentUser.roles
-            ? currentUser.roles.map(role => role.name.replace('ROLE_', '')).join(', ')
-            : 'No roles';
-
-        currentUserInfo.textContent = `${currentUser.username} with role: ${roles}`;
-
-        // Заполнение таблицы информации о текущем пользователе
-        adminTableBody.innerHTML = `
-            <tr>
-                <td>${currentUser.id || '-'}</td>
-                <td>${currentUser.username || '-'}</td>
-                <td>${currentUser.lastName || '-'}</td>
-                <td>${currentUser.age || '-'}</td>
-                <td>${currentUser.email || '-'}</td>
-                <td>${currentUser.city || '-'}</td>
-                <td>${roles}</td>
-            </tr>
-        `;
+    // Отображение информации о текущем пользователе в шапке
+    function displayCurrentUserInfo(user) {
+        if (!user) return;
+        const roles = user.roles ? user.roles.map(role => role.name.replace('ROLE_', '')).join(', ') : 'No roles';
+        currentUserInfo.textContent = `${user.username} with role: ${roles}`;
     }
 
+    // Заполнение таблицы данными текущего пользователя
+    function renderCurrentUserTable(user) {
+        adminTableBody.innerHTML = '';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${user.id || '-'}</td>
+            <td>${user.username || '-'}</td>
+            <td>${user.lastName || '-'}</td>
+            <td>${user.age || '-'}</td>
+            <td>${user.email || '-'}</td>
+            <td>${user.city || '-'}</td>
+            <td>${user.roles ? user.roles.map(role => role.name.replace('ROLE_', '')).join(', ') : '-'}</td>
+        `;
+        adminTableBody.appendChild(row);
+    }
 
     // Загрузка ролей
     async function loadRoles() {
         try {
             const response = await fetch(ROLES_ENDPOINT);
             if (!response.ok) throw new Error('Failed to load roles');
-            const roles = await response.json();
 
-            // Заполняем select в форме создания пользователя
+            const roles = await response.json();
             rolesSelect.innerHTML = '';
+
             roles.forEach(role => {
                 const option = document.createElement('option');
                 option.value = role.id;
@@ -109,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const response = await fetch(USERS_ENDPOINT);
             if (!response.ok) throw new Error('Failed to load users');
+
             const users = await response.json();
             renderUsersTable(users);
         } catch (error) {
@@ -117,32 +123,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Отображение текущего пользователя
-    async function displayCurrentUser() {
-        try {
-            // Предполагаем, что данные текущего пользователя доступны через Thymeleaf
-            const principal = JSON.parse(document.querySelector('.navbar-brand span').getAttribute('data-principal'));
-
-            adminTableBody.innerHTML = `
-                <tr>
-                    <td>${principal.id || '-'}</td>
-                    <td>${principal.username || '-'}</td>
-                    <td>${principal.lastName || '-'}</td>
-                    <td>${principal.age || '-'}</td>
-                    <td>${principal.email || '-'}</td>
-                    <td>${principal.city || '-'}</td>
-                    <td>${principal.roles?.map(role => role.name.replace('ROLE_', '')).join(', ') || '-'}</td>
-                </tr>
-            `;
-        } catch (error) {
-            console.error('Error displaying current user:', error);
-        }
-    }
-
     // Рендер таблицы пользователей
     function renderUsersTable(users) {
-        usersTableBody.innerHTML = users.map(user => `
-            <tr>
+        usersTableBody.innerHTML = '';
+
+        if (!users || users.length === 0) {
+            usersTableBody.innerHTML = `
+                <tr>
+                    <td colspan="9" class="text-center">No users found</td>
+                </tr>
+            `;
+            return;
+        }
+
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
                 <td>${user.id}</td>
                 <td>${user.username || '-'}</td>
                 <td>${user.lastName || '-'}</td>
@@ -160,10 +156,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         Delete
                     </button>
                 </td>
-            </tr>
-        `).join('');
+            `;
+            usersTableBody.appendChild(row);
+        });
 
-        // Добавляем обработчики событий
         addEditListeners();
         addDeleteListeners();
     }
@@ -195,17 +191,16 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('editUserId').value = user.id;
         document.getElementById('editUsername').value = user.username || '';
         document.getElementById('editLastName').value = user.lastName || '';
-        document.getElementById('editPassword').value = user.password || ''; // Добавлено заполнение пароля
+        document.getElementById('editPassword').value = user.password || '';
         document.getElementById('editAge').value = user.age || '';
         document.getElementById('editEmail').value = user.email || '';
         document.getElementById('editCity').value = user.city || '';
 
-        // Сброс чекбоксов ролей
+        // Сброс и установка ролей
         document.getElementById('editRoleAdmin').checked = false;
         document.getElementById('editRoleUser').checked = false;
 
-        // Установка ролей пользователя
-        user.roles.forEach(role => {
+        user.roles?.forEach(role => {
             if (role.name === 'ROLE_ADMIN') {
                 document.getElementById('editRoleAdmin').checked = true;
             } else if (role.name === 'ROLE_USER') {
@@ -265,8 +260,6 @@ document.addEventListener('DOMContentLoaded', function () {
             userForm.reset();
             await loadAllUsers();
             showMessage('User created successfully', 'success');
-
-            // Переключение на вкладку с таблицей
             document.getElementById('tab1').click();
         } catch (error) {
             console.error('Error creating user:', error);
@@ -290,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
             id: document.getElementById('editUserId').value,
             username: document.getElementById('editUsername').value,
             lastName: document.getElementById('editLastName').value,
-            password: document.getElementById('editPassword').value, // Добавлено поле пароля
+            password: document.getElementById('editPassword').value,
             age: parseInt(document.getElementById('editAge').value) || null,
             email: document.getElementById('editEmail').value,
             city: document.getElementById('editCity').value,
@@ -313,11 +306,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             await loadAllUsers();
 
-            // Исправленный способ закрытия модального окна
             const editModal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
-            if (editModal) {
-                editModal.hide();
-            }
+            if (editModal) editModal.hide();
 
             showMessage('User updated successfully', 'success');
         } catch (error) {
@@ -339,11 +329,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             await loadAllUsers();
 
-            // Исправленный способ закрытия модального окна
             const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteUserModal'));
-            if (deleteModal) {
-                deleteModal.hide();
-            }
+            if (deleteModal) deleteModal.hide();
 
             showMessage('User deleted successfully', 'success');
             deleteUserId = null;

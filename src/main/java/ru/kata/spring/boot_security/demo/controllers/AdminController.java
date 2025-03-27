@@ -36,8 +36,9 @@ public class AdminController {
 
 
     @GetMapping("/users/current")
-    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal final Principal principal) {
-        return new ResponseEntity<>(userService.findByUsername(principal.getName()), HttpStatus.OK);
+    public ResponseEntity<User> getCurrentUser(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
